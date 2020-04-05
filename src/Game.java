@@ -1,17 +1,29 @@
-public class Game extends Movements{
+import java.util.Scanner;
+
+public class Game extends Movements {
 
     private boolean turn; // turn = 1 -> black : white
     private Board board;
 
-    private void start() {
+    private void start() throws InterruptedException {
         board.set(4, 'D', false);
         board.set(4, 'E', true);
         board.set(5, 'D', true);
         board.set(5, 'E', false);
-        board.print();
-        board.clrScr();
+        Scanner inp = new Scanner(System.in);
         while (toBeContinued()) {
-
+            board.print();
+            System.out.print("Select a cell: ");
+            int row = inp.nextInt();
+            char column = inp.next().charAt(0);
+            if (valid(row, column - 'A' + 1) && isValid(row, column - 'A' + 1, turn)) {
+                board.update(row, column - 'A' + 1, turn);
+            } else {
+                System.out.println("Try Again");
+            }
+//            board.clrScr();
+            Thread.sleep(3000);
+            turn = !turn;
         }
     }
 
@@ -19,12 +31,8 @@ public class Game extends Movements{
         for (int i = 1; i < MAXN; i++)
             for (int j = 1; j < MAXN; j++)
                 if (isValid(i, j, turn))
-                    return false;
-        return true;
-    }
-
-    public boolean valid(int x, int y) {
-        return x > 0 && y > 0 && x <= 8 && y <= 8;
+                    return true;
+        return false;
     }
 
     private boolean isValid(int x, int y, boolean turn) {
@@ -49,7 +57,7 @@ public class Game extends Movements{
         board = new Board();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Game game = new Game();
         game.start();
     }

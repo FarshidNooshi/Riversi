@@ -31,6 +31,28 @@ public class Board extends Movements {
         }
     }
 
+    public void update(int x, int y, boolean col) {
+        table[x][y] = (col ? uniBlack : uniWhite);
+        for (int i = 0; i < 8; i++) {
+            int xx = x + px[i], yy = y + py[i];
+            int cnt = 0;
+            while (valid(xx, yy) && table[xx][yy] == (col ? uniWhite : uniBlack)) {
+                xx += px[i];
+                yy += py[i];
+                cnt++;
+            }
+            if (cnt > 0 && valid(xx, yy) && table[xx][yy] == (col ? uniBlack : uniWhite)) {
+                xx = x + px[i];
+                yy = y + py[i];
+                while (valid(xx, yy) && table[xx][yy] == (col ? uniWhite : uniBlack)) {
+                    table[xx][yy] = (col ? uniBlack : uniWhite);
+                    xx += px[i];
+                    yy += py[i];
+                }
+            }
+        }
+    }
+
     public char get(int x, int y) {
         return table[x][y];
     }
