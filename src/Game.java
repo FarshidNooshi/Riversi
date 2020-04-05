@@ -11,18 +11,26 @@ public class Game extends Movements {
         board.set(5, 'D', true);
         board.set(5, 'E', false);
         Scanner inp = new Scanner(System.in);
-        while (toBeContinued()) {
-            board.print();
-            System.out.print("Select a cell: ");
+        while (true) {
+            if (!toBeContinued()) {
+                System.out.println("pass");
+                turn = !turn;
+            }
+            if (!toBeContinued()) {
+                return;
+            }
+            board.print(turn);
+            System.out.print("Player " + (turn ? "Black" : "White") + " Select a cell: ");
             int row = inp.nextInt();
             char column = inp.next().charAt(0);
-            if (valid(row, column - 'A' + 1) && isValid(row, column - 'A' + 1, turn)) {
+            if (valid(row, column - 'A' + 1) && board.isValid(row, column - 'A' + 1, turn)) {
                 board.update(row, column - 'A' + 1, turn);
             } else {
                 System.out.println("Try Again");
+                turn = !turn;
             }
 //            board.clrScr();
-            Thread.sleep(3000);
+//            Thread.sleep(3000);
             turn = !turn;
         }
     }
@@ -30,25 +38,8 @@ public class Game extends Movements {
     private Boolean toBeContinued() {
         for (int i = 1; i < MAXN; i++)
             for (int j = 1; j < MAXN; j++)
-                if (isValid(i, j, turn))
+                if (board.isValid(i, j, turn))
                     return true;
-        return false;
-    }
-
-    private boolean isValid(int x, int y, boolean turn) {
-        if (board.get(x, y) != '-')
-            return false;
-        for (int i = 0; i < 8; i++) {
-            int xx = x + px[i], yy = y + py[i];
-            int cnt = 0;
-            while (valid(xx, yy) && board.get(xx, yy) == (turn ? uniWhite : uniBlack)) {
-                xx += px[i];
-                yy += py[i];
-                cnt++;
-            }
-            if (cnt > 0 && valid(xx, yy) && board.get(xx, yy) == (turn ? uniBlack : uniWhite))
-                return true;
-        }
         return false;
     }
 
@@ -57,8 +48,25 @@ public class Game extends Movements {
         board = new Board();
     }
 
+    void end() {
+        int cnt1 = 0, cnt2 = 0;
+        for (int i = 1; i < MAXN; i++)
+            for (int j = 1; j < MAXN; j++)
+                if (board.get(i, j) == uniBlack)
+                    cnt1++;
+                else if (board.get(i, j) == uniWhite)
+                    cnt2++;
+        System.out.println("Player Black has " + cnt1 + " cells.");
+        System.out.println("Player White has " + cnt2 + " cells.");
+        if (cnt1 != cnt2)
+            System.out.println("The winner is " + (cnt1 < cnt2 ? "White." : "Black."));
+        else
+            System.out.println("The game ends in tie.");
+    }
+
     public static void main(String[] args) throws InterruptedException {
         Game game = new Game();
         game.start();
+        game.end();
     }
 }

@@ -18,20 +18,40 @@ public class Board extends Movements {
             System.out.println();
     }
 
-    void print() {
+    boolean isValid(int x, int y, boolean turn) {
+        if (table[x][y] != '-')
+            return false;
+        for (int i = 0; i < 8; i++) {
+            int xx = x + px[i], yy = y + py[i];
+            int cnt = 0;
+            while (valid(xx, yy) && table[xx][yy] == (turn ? uniWhite : uniBlack)) {
+                xx += px[i];
+                yy += py[i];
+                cnt++;
+            }
+            if (cnt > 0 && valid(xx, yy) && table[xx][yy] == (turn ? uniBlack : uniWhite))
+                return true;
+        }
+        return false;
+    }
+
+    void print(boolean col) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (table[i][j] == '-') {
-                    System.out.print(" |");
+                    if (isValid(i, j, col))
+                        System.out.print(semiCol + "|");
+                    else
+                        System.out.print(" |");
                     continue;
                 }
-                System.out.print((char) table[i][j] + "|");
+                System.out.print(table[i][j] + "|");
             }
             System.out.println();
         }
     }
 
-    public void update(int x, int y, boolean col) {
+    void update(int x, int y, boolean col) {
         table[x][y] = (col ? uniBlack : uniWhite);
         for (int i = 0; i < 8; i++) {
             int xx = x + px[i], yy = y + py[i];
@@ -57,7 +77,7 @@ public class Board extends Movements {
         return table[x][y];
     }
 
-    public void set(int x, char y, boolean col) {
+    void set(int x, char y, boolean col) {
         table[x][y - 'A' + 1] = (col ? uniBlack : uniWhite);
     }
 }
