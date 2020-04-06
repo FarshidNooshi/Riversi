@@ -1,3 +1,4 @@
+// In The Name Of GOD
 public class Board extends Movements {
     private char[][] table;
 
@@ -11,6 +12,29 @@ public class Board extends Movements {
             table[i + 1][0] = (char) (i + '1');
             table[0][i + 1] = (char) ('A' + i);
         }
+    }
+
+    public int count(int x, int y, boolean col) {
+        int counter = 1;
+        for (int i = 0; i < 8; i++) {
+            int xx = x + px[i], yy = y + py[i];
+            int cnt = 0;
+            while (valid(xx, yy) && table[xx][yy] == (col ? uniWhite : uniBlack)) {
+                xx += px[i];
+                yy += py[i];
+                cnt++;
+            }
+            if (cnt > 0 && valid(xx, yy) && table[xx][yy] == (col ? uniBlack : uniWhite)) {
+                xx = x + px[i];
+                yy = y + py[i];
+                while (valid(xx, yy) && table[xx][yy] == (col ? uniWhite : uniBlack)) {
+                    counter++;
+                    xx += px[i];
+                    yy += py[i];
+                }
+            }
+        }
+        return counter;
     }
 
     public void clrScr() {

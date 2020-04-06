@@ -1,3 +1,4 @@
+// In The Name Of GOD
 import java.util.Scanner;
 
 public class Game extends Movements {
@@ -11,14 +12,61 @@ public class Game extends Movements {
         board.set(5, 'D', true);
         board.set(5, 'E', false);
         Scanner inp = new Scanner(System.in);
+        System.out.println("Do you want to play against Computer ?\n[y]yes [n]no");
+        char c = inp.next().charAt(0);
+        if (c == 'n')
+            multiPlay(inp);
+        else
+            singlePlay(inp);
+    }
+
+    private void singlePlay(Scanner inp) throws InterruptedException {
         while (true) {
+            Thread.sleep(1000);
+            board.clrScr();
             if (!toBeContinued()) {
                 System.out.println("pass");
                 turn = !turn;
             }
-            if (!toBeContinued()) {
+            if (!toBeContinued())
                 return;
+            board.print(turn);
+            System.out.print("Player " + (turn ? "Black" : "White") + " Select a cell: ");
+            if (turn) {
+                int row = inp.nextInt();
+                char column = inp.next().charAt(0);
+                if (valid(row, column - 'A' + 1) && board.isValid(row, column - 'A' + 1, turn)) {
+                    board.update(row, column - 'A' + 1, turn);
+                } else {
+                    System.out.println("Try Again");
+                    turn = !turn;
+                }
+            } else {
+                int mx = -1, x = 0, y = 0;
+                for (int i = 1; i < MAXN; i++)
+                    for (int j = 1; j < MAXN; j++)
+                        if (board.isValid(i, j, turn) && mx < board.count(i, j, turn)) {
+                            mx = board.count(i, j, turn);
+                            x = i;
+                            y = j;
+                        }
+                System.out.println(x + " " + (char)(y + 'A' - 1));
+                board.update(x, y, turn);
             }
+            turn = !turn;
+        }
+    }
+
+    private void multiPlay(Scanner inp) throws InterruptedException {
+        while (true) {
+            Thread.sleep(1000);
+            board.clrScr();
+            if (!toBeContinued()) {
+                System.out.println("pass");
+                turn = !turn;
+            }
+            if (!toBeContinued())
+                return;
             board.print(turn);
             System.out.print("Player " + (turn ? "Black" : "White") + " Select a cell: ");
             int row = inp.nextInt();
@@ -29,8 +77,6 @@ public class Game extends Movements {
                 System.out.println("Try Again");
                 turn = !turn;
             }
-//            board.clrScr();
-//            Thread.sleep(3000);
             turn = !turn;
         }
     }
@@ -65,6 +111,7 @@ public class Game extends Movements {
     }
 
     public static void main(String[] args) throws InterruptedException {
+        System.out.println("In The Name Of GOD");
         Game game = new Game();
         game.start();
         game.end();
