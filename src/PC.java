@@ -1,5 +1,10 @@
 import java.util.Scanner;
 
+/**
+ * it's the pc class for computer mode
+ * it plays as a computer
+ */
+
 public class PC extends Player {
     public PC(Board board) {
         super(board);

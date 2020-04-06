@@ -1,5 +1,10 @@
 import java.util.Scanner;
 
+/**
+ * it's the Player human class which extends in PC class for computers
+ * it just got the game board
+ */
+
 public class Player extends Movements {
     protected Board board;
 
