@@ -1,4 +1,5 @@
 // In The Name Of GOD
+
 public class Movements {
     final int[] px = {0, 0, 1, 1, 1, -1, -1, -1};
     final int[] py = {1, -1, 0, 1, -1, 1, 0, -1};

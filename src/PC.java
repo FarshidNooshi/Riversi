@@ -17,6 +17,7 @@ public class PC extends Player {
     @Override
     protected boolean play(Scanner inp, boolean turn) {
         board.print(turn);
+        System.out.print("Player " + (turn ? "Black" : "White") + " Select a cell: ");
         int mx = -1, x = 0, y = 0;
         for (int i = 1; i < MAXN; i++)
             for (int j = 1; j < MAXN; j++)
